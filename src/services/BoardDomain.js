@@ -13,7 +13,7 @@ const boardFieldTypes = {
 };
 
 class BoardDomain extends Domain {
-    constructor({boardSize,SnakeDomain,TreatDomain,RoundDomain}) {
+    constructor({boardSize,SnakeDomain,TreatDomain}) {
 
         let board = new View(
             {
@@ -52,7 +52,7 @@ class BoardDomain extends Domain {
                     /** 1. if head touches a treat, player gets a point */
                     if (I.is(head, treat)) {
                         TreatDomain.spawn();
-                        RoundDomain.increase();
+                        SnakeDomain.increase();
                     }
 
                     /** 2. if snake head reaches same position
@@ -60,7 +60,7 @@ class BoardDomain extends Domain {
                      * player looses
                      */
                     if (data.get('snake').butLast().find(v => I.is(v,head))) {
-                        RoundDomain.loose();
+                        SnakeDomain.reset();
                     }
 
                     /** 3. if treat appeared on position of snake's body

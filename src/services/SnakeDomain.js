@@ -72,8 +72,11 @@ class Snake extends Domain {
             new SnakeBody({RoundDomain, snakePositions}),
             /** actions */
             {
-                grow() {
-                    snakeLength.set('length', snakeLength.get('length') + 1);
+                increase() {
+                    RoundDomain.increase();
+                },
+                reset() {
+                    RoundDomain.loose();
                 }
             }
         );
