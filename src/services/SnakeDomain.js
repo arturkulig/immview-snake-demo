@@ -1,4 +1,7 @@
-import * as I from 'immutable';
+import {
+    Map,
+    List,
+} from 'immutable';
 
 import {
     View,
@@ -9,12 +12,12 @@ import {
 import Direction from './DirectionDomain';
 
 /**
- * I.List<{x,y}>
+ * List<{x,y}>
  */
 class SnakePositions extends View {
     constructor({boardSize}) {
 
-        let snakeStartPosition = I.Map({
+        let snakeStartPosition = Map({
             x: Math.round(boardSize / 2),
             y: Math.round(boardSize / 2),
         });
@@ -25,12 +28,12 @@ class SnakePositions extends View {
                 if (this && this.structure) {
                     let positions = this.structure;
                     let lastPosition = positions.last();
-                    return positions.push(I.Map({
+                    return positions.push(Map({
                         x: Math.max(0, Math.min(boardSize - 1, lastPosition.get('x') + data.get('direction').get('x'))),
                         y: Math.max(0, Math.min(boardSize - 1, lastPosition.get('y') + data.get('direction').get('y'))),
                     }));
                 } else {
-                    return I.List([snakeStartPosition]);
+                    return List([snakeStartPosition]);
                 }
             }
         );
@@ -38,7 +41,7 @@ class SnakePositions extends View {
 }
 
 /**
- * I.List<{x,y}>
+ * List<{x,y}>
  */
 class SnakeBody extends View {
     constructor({RoundDomain,snakePositions}) {
@@ -55,7 +58,7 @@ class SnakeBody extends View {
                 ) {
                     return data.get('snakePositions').takeLast(data.getIn(['RoundDomain', 'points']) + 1);
                 } else {
-                    return I.List();
+                    return List();
                 }
             }
         )

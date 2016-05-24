@@ -1,18 +1,23 @@
 import {
     Data,
-    Domain
+    Domain,
 } from 'immview';
+import {
+    Map,
+} from 'immutable';
+
+const now = () => Map({ tick: +(new Date()) });
 
 class Ticker extends Domain {
     constructor(tempo = 200) {
         super(
             /** structure */
-            new Data({}),
+            new Data(now()),
 
             /** actions */
             {
                 tick: function () {
-                    this.data.set('tick', +(new Date()));
+                    this.stream.write(now());
                 }
             }
         );

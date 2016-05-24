@@ -1,4 +1,4 @@
-import * as I from 'immutable';
+import { Map } from 'immutable';
 import {
     Data,
     Domain
@@ -10,14 +10,14 @@ function randomInt(max) {
 
 export default class TreatDomain extends Domain {
     constructor({boardSize}) {
-        let treatData = new Data(I.Map({x: randomInt(boardSize), y: randomInt(boardSize)}));
+        let treatData = new Data(Map({x: randomInt(boardSize), y: randomInt(boardSize)}));
         super(
             /** structure */
             treatData,
             /** actions */
             {
-                spawn({x=randomInt(boardSize),y=randomInt(boardSize)}={}) {
-                    treatData.update(() => I.Map({x, y}));
+                spawn({ x = randomInt(boardSize), y = randomInt(boardSize) } = {}) {
+                    treatData.write(Map({x, y}));
                 }
             }
         );

@@ -1,4 +1,7 @@
-import * as I from 'immutable';
+import {
+    Map,
+    is,
+} from 'immutable';
 
 import {
     View,
@@ -17,11 +20,11 @@ const keys = {
 };
 
 const directionVectors = {
-    NONE: I.Map({x: 0, y: 0}),
-    UP: I.Map({x: 0, y: -1}),
-    DOWN: I.Map({x: 0, y: 1}),
-    LEFT: I.Map({x: -1, y: 0}),
-    RIGHT: I.Map({x: 1, y: 0}),
+    NONE: Map({x: 0, y: 0}),
+    UP: Map({x: 0, y: -1}),
+    DOWN: Map({x: 0, y: 1}),
+    LEFT: Map({x: -1, y: 0}),
+    RIGHT: Map({x: 1, y: 0}),
 };
 
 const directionDictionary = {
@@ -68,14 +71,13 @@ class Direction extends Domain {
                 //if there is and would be tick with NONE direction, do not tick
                 if (
                     directionData &&
-                    directionData.structure &&
-                    //I.is(directionData.structure.get('direction'), directionVectors.NONE) &&
-                    I.is(direction, directionVectors.NONE)
+                    directionData.read() &&
+                    is(direction, directionVectors.NONE)
                 ) {
                     return directionData.structure;
                 }
                 // else - send new direction
-                return I.Map({
+                return Map({
                     tick: data.get('tick'),
                     direction: direction || directionVectors.NONE,
                 });

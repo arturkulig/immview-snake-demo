@@ -1,4 +1,4 @@
-import * as I from 'immutable';
+import { Map } from 'immutable';
 import {
     Data,
     Domain
@@ -6,7 +6,7 @@ import {
 
 export default class RoundDomain extends Domain {
     constructor() {
-        let roundData = new Data(I.Map({
+        let roundData = new Data(Map({
             points: 0,
         }));
 
@@ -16,10 +16,10 @@ export default class RoundDomain extends Domain {
             /** actions */
             {
                 increase() {
-                    roundData.update(data => data.set('points', data.get('points') + 1));
+                    roundData.write(data => data.set('points', data.get('points') + 1));
                 },
                 loose() {
-                    roundData.update(data => data.set('points', 0));
+                    roundData.write(data => data.set('points', 0));
                 }
             }
         )

@@ -17,8 +17,8 @@ class BoardDomain extends Domain {
 
         let board = new View(
             {
-                snake: SnakeDomain.view,
-                treat: TreatDomain.view,
+                snake: SnakeDomain,
+                treat: TreatDomain,
             },
             data => {
 
