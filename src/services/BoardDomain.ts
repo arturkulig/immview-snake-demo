@@ -19,7 +19,8 @@ const BoardStream = new Merge({
     snake: SnakeDomain,
     treat: TreatDomain,
 }).buffer(1).map(
-    ([{ snake, treat }]): Matrix<FIELD_TYPES> => {
+    ([{snake, treat}]): Matrix<FIELD_TYPES> => {
+
         /** board rules */
         const snakeHead = snake[0]
 
@@ -27,7 +28,6 @@ const BoardStream = new Merge({
          * 1. if head touches a treat, player gets a points
          */
         if (snakeHead.is(treat)) {
-            console.log('POINT!')
             TreatDomain.spawn()
             SnakeDomain.increase()
         }
@@ -38,7 +38,6 @@ const BoardStream = new Merge({
          * player looses
          */
         if (snake.slice(1).find(v => v.is(snakeHead))) {
-            console.log('BODY TOUCHED!')
             SnakeDomain.reset()
             TreatDomain.spawn()
             return new Matrix<FIELD_TYPES>(FIELD_TYPES.EMPTY)
@@ -50,7 +49,6 @@ const BoardStream = new Merge({
          * then respawn the treat without points increase
          */
         if (snake.slice(1).find(v => v.is(treat))) {
-            console.log('TREAT SMASHED!')
             TreatDomain.spawn()
         }
 
@@ -62,7 +60,6 @@ const BoardStream = new Merge({
             snakeHead.x < 0 || snakeHead.x >= BOARD_SIZE ||
             snakeHead.y < 0 || snakeHead.y >= BOARD_SIZE
         ) {
-            console.log('BORDER TOUCHED!')
             SnakeDomain.reset()
             TreatDomain.spawn()
             return new Matrix<FIELD_TYPES>(FIELD_TYPES.EMPTY)

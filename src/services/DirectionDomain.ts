@@ -1,5 +1,6 @@
 import {
     Observable,
+    Merge,
     Domain
 } from 'immview'
 import Vector from './Vector'
@@ -29,8 +30,6 @@ const directionDictionary = {
     [DIRECTIONS.NONE]: directionVectors.NONE,
 }
 
-let _requestedDirection = directionVectors.NONE
-
 function isAcceptableNewDirection(oldDir: Vector, newDir: Vector) {
     return (
         oldDir === directionVectors.NONE ||
@@ -45,8 +44,16 @@ function isAcceptableNewDirection(oldDir: Vector, newDir: Vector) {
     )
 }
 
-const DirectionsStream = TickerDomain
-    .map(() => _requestedDirection)
+const DirectionDemandStream = new Observable<Vector>(observer => { observer.next(directionVectors.NONE) })
+
+const DirectionsStream = new Merge({ TickerDomain, DirectionDemandStream })
+    .bufferCount(2, 1)
+    .filter(value => {
+        return value[0].TickerDomain.tick !== value[1].TickerDomain.tick
+    })
+    .map(value => {
+        return value[value.length - 1].DirectionDemandStream
+    })
     .scan((requestedDirection, lastAcceptableDirection: Vector) => {
         if (!lastAcceptableDirection) return directionVectors.NONE
         return (
@@ -61,7 +68,7 @@ export default Domain.create(
     {
         go(requested: DIRECTIONS) {
             if (directionDictionary[requested]) {
-                _requestedDirection = directionDictionary[requested]
+                DirectionDemandStream.next(directionDictionary[requested])
             }
         }
     }
