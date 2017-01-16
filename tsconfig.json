@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "types": [],
+        "module": "commonjs",
+        "lib": [
+            "dom",
+            "es6",
+            "dom.iterable",
+            "es2015.promise"
+        ],
+        "experimentalDecorators": true,
+        "jsx": "react",
+        "isolatedModules": false,
+        "allowJs": true
+    },
+    "include": [
+        "./src/**/*.ts"
+    ],
+    "exclude": [
+        "./src/server/*.ts"
+    ]
+}

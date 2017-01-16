@@ -1,19 +1,19 @@
-var path = require('path');
+const path = require('path');
+
 module.exports = {
-    entry: path.resolve(__dirname, 'src/index.js'),
+    entry: path.resolve(__dirname, 'src/index.tsx'),
     output: {
-        path: __dirname + '/dist',
-        //publicPath: __dirname + '/dist',
+        path: path.resolve(__dirname + '/dist'),
         filename: 'index.js'
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js', '']
     },
     module: {
         loaders: [
             {
-                test: /\.js$/,
-                loader: 'babel',
-                query: {
-                    presets: ['es2015', 'stage-0', 'react'],
-                },
+                test: /\.tsx?$/,
+                loader: 'awesome-typescript-loader'
             },
         ],
     },
@@ -21,6 +21,7 @@ module.exports = {
     devServer: {
         inline: true,
         port: 8080,
-        open: 'http://localhost:8080/index'
+        open: 'http://localhost:8080/',
+        contentBase: 'dist'
     }
 };
