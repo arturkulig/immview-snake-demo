@@ -1,9 +1,12 @@
 import * as React from 'react'
 import Board from './Board'
 import KeyboardControls from './KeyboardControls'
+import TouchControls from './TouchControls'
+import Points from './Points'
 
 const boardStyle: React.CSSProperties = {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     width: '100vw',
     padding: '0',
@@ -19,7 +22,9 @@ export default function App() {
     return (
         <div style={boardStyle} >
             <Board />
+            <Points />
             <KeyboardControls />
+            <TouchControls />
         </div>
     )
 }
