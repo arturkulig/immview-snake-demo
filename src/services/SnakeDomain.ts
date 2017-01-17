@@ -20,7 +20,7 @@ const DirectionsStream = DirectionDomain.map(v => v)
 
 const SnakePositionsStream =
     DirectionsStream
-        .scan((direction, allDirections: SnakeBodyV = snakeDefaultShape) => {
+        .scan((allDirections: SnakeBodyV = snakeDefaultShape, direction) => {
             if (direction === DIRECTIONS_RESET) {
                 return snakeDefaultShape
             }

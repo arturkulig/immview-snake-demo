@@ -54,7 +54,7 @@ const DirectionsStream = new Merge({ TickerDomain, DirectionDemandStream })
     .map(value => {
         return value[value.length - 1].DirectionDemandStream
     })
-    .scan((requestedDirection, lastAcceptableDirection: Vector) => {
+    .scan((lastAcceptableDirection: Vector, requestedDirection) => {
         if (!lastAcceptableDirection) return directionVectors.NONE
         return (
             isAcceptableNewDirection(lastAcceptableDirection, requestedDirection)
