@@ -1,10 +1,10 @@
 import {
     Observable,
-    Merge,
+    Combine,
     Domain
 } from 'immview'
 import Vector from './Vector'
-import TickerDomain from './TickerDomain'
+import Ticker$ from './TickerDomain'
 
 export enum DIRECTIONS {
     NONE,
@@ -44,15 +44,15 @@ function isAcceptableNewDirection(oldDir: Vector, newDir: Vector) {
     )
 }
 
-const DirectionDemandStream = new Observable<Vector>(observer => { observer.next(directionVectors.NONE) })
+const directionDemand$ = new Observable<Vector>(observer => { observer.next(directionVectors.NONE) })
 
-const DirectionsStream = new Merge({ TickerDomain, DirectionDemandStream })
+const direction$ = new Combine({ ticker: Ticker$, directionDemand: directionDemand$ })
     .bufferCount(2, 1)
     .filter(value => {
-        return value[0].TickerDomain.tick !== value[1].TickerDomain.tick
+        return value[0].ticker.tick !== value[1].ticker.tick
     })
     .map(value => {
-        return value[value.length - 1].DirectionDemandStream
+        return value[value.length - 1].directionDemand
     })
     .scan((lastAcceptableDirection: Vector, requestedDirection) => {
         if (!lastAcceptableDirection) return directionVectors.NONE
@@ -64,11 +64,12 @@ const DirectionsStream = new Merge({ TickerDomain, DirectionDemandStream })
     })
 
 export default Domain.create(
-    DirectionsStream,
+    'Direction',
+    direction$,
     {
         go(requested: DIRECTIONS) {
             if (directionDictionary[requested]) {
-                DirectionDemandStream.next(directionDictionary[requested])
+                directionDemand$.next(directionDictionary[requested])
             }
         }
     }

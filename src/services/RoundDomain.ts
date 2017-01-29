@@ -3,23 +3,24 @@ import {
     Domain
 } from 'immview';
 
-export type RoundDomainV = {
+export type Round$V = {
     points: number
 }
 
-const Round = new Observable<RoundDomainV>(({next}) => { next({ points: 0 }) })
+const round$ = Observable.of<Round$V>({ points: 0 })
 
 export default Domain.create(
-    Round,
+    'Round',
+    round$,
     {
         increase() {
-            Round.next(({points}) => ({ points: points + 1 }))
+            round$.next(({points}) => ({ points: points + 1 }))
         },
         decrease() {
-            Round.next(({points}) => ({ points: points - 1 }))
+            round$.next(({points}) => ({ points: points - 1 }))
         },
         loose() {
-            Round.next({ points: 0 })
+            round$.next({ points: 0 })
         }
     }
 )

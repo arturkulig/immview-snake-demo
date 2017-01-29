@@ -1,11 +1,11 @@
 import {
     Observable,
-    Merge,
+    Combine,
     Domain
 } from 'immview'
 import Vector from './Vector'
-import DirectionDomain, { DIRECTIONS } from './DirectionDomain'
-import RoundDomain from './RoundDomain'
+import Direction$, { DIRECTIONS } from './DirectionDomain'
+import Round$ from './RoundDomain'
 import { BOARD_SIZE } from '../config'
 
 export type SnakeBodyV = Vector[]
@@ -16,10 +16,10 @@ const snakeDefaultShape = [new Vector(
 )]
 
 const DIRECTIONS_RESET = new Vector(0, 0)
-const DirectionsStream = DirectionDomain.map(v => v)
+const direction$ = Direction$.map(v => v)
 
-const SnakePositionsStream =
-    DirectionsStream
+const snakePositions$ =
+    direction$
         .scan((allDirections: SnakeBodyV = snakeDefaultShape, direction) => {
             if (direction === DIRECTIONS_RESET) {
                 return snakeDefaultShape
@@ -29,25 +29,24 @@ const SnakePositionsStream =
             return [nextPosition, ...allDirections].slice(0, BOARD_SIZE * BOARD_SIZE)
         })
 
-const SnakeBody = new Merge({
-    SnakePositions: SnakePositionsStream,
-    Round: RoundDomain
-}).map(({ SnakePositions, Round }) => {
-    return SnakePositions.slice(0, (Round.points + 1))
+const snakeBody$ = new Combine({
+    snakePositions: snakePositions$,
+    round: Round$
+}).map(function takeLastSnakePositions({ snakePositions, round }) {
+    return snakePositions.slice(0, (round.points + 1))
 })
 
-const Snake = Domain.create(
-    SnakeBody,
+export default Domain.create(
+    'Snake',
+    snakeBody$,
     {
         increase() {
-            RoundDomain.increase()
+            Round$.increase()
         },
         reset() {
-            DirectionsStream.next(DIRECTIONS_RESET)
-            DirectionDomain.go(DIRECTIONS.NONE)
-            RoundDomain.loose()
+            direction$.next(DIRECTIONS_RESET)
+            Direction$.go(DIRECTIONS.NONE)
+            Round$.loose()
         }
     }
 )
-
-export default Snake

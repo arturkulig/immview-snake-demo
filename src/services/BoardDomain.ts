@@ -1,11 +1,11 @@
 import {
     Observable,
-    Merge,
+    Combine,
     Domain
 } from 'immview'
 import { BOARD_SIZE } from '../config'
-import TreatDomain from './TreatDomain'
-import SnakeDomain from './SnakeDomain'
+import Treat$ from './TreatDomain'
+import Snake$ from './SnakeDomain'
 import Vector from './Vector'
 import Matrix from './Matrix'
 
@@ -15,9 +15,9 @@ export enum FIELD_TYPES {
     TREAT = 2,
 }
 
-const BoardStream = new Merge({
-    snake: SnakeDomain,
-    treat: TreatDomain,
+const board$ = new Combine({
+    snake: Snake$,
+    treat: Treat$,
 }).buffer(1).map(
     ([{snake, treat}]): Matrix<FIELD_TYPES> => {
 
@@ -28,8 +28,8 @@ const BoardStream = new Merge({
          * 1. if head touches a treat, player gets a points
          */
         if (snakeHead.is(treat)) {
-            TreatDomain.spawn()
-            SnakeDomain.increase()
+            Treat$.spawn()
+            Snake$.increase()
         }
 
         /** 
@@ -38,8 +38,8 @@ const BoardStream = new Merge({
          * player looses
          */
         if (snake.slice(1).find(v => v.is(snakeHead))) {
-            SnakeDomain.reset()
-            TreatDomain.spawn()
+            Snake$.reset()
+            Treat$.spawn()
             return new Matrix<FIELD_TYPES>(FIELD_TYPES.EMPTY)
         }
 
@@ -49,7 +49,7 @@ const BoardStream = new Merge({
          * then respawn the treat without points increase
          */
         if (snake.slice(1).find(v => v.is(treat))) {
-            TreatDomain.spawn()
+            Treat$.spawn()
         }
 
         /** 
@@ -60,8 +60,8 @@ const BoardStream = new Merge({
             snakeHead.x < 0 || snakeHead.x >= BOARD_SIZE ||
             snakeHead.y < 0 || snakeHead.y >= BOARD_SIZE
         ) {
-            SnakeDomain.reset()
-            TreatDomain.spawn()
+            Snake$.reset()
+            Treat$.spawn()
             return new Matrix<FIELD_TYPES>(FIELD_TYPES.EMPTY)
         }
 
@@ -78,6 +78,7 @@ const BoardStream = new Merge({
     )
 
 export default Domain.create(
-    BoardStream,
+    'Board',
+    board$,
     {}
 )

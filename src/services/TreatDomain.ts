@@ -9,20 +9,19 @@ function randomBoardDistance() {
     return Math.floor(Math.random() * BOARD_SIZE)
 }
 
-export type TreatV = Vector
+export type Treat$V = Vector
 
-const TreatStream = new Observable<TreatV>(({next}) => {
-    next(new Vector(
-        randomBoardDistance(),
-        randomBoardDistance()
-    ))
-})
+const treat$ = new Observable<Treat$V>().startWith(new Vector(
+    randomBoardDistance(),
+    randomBoardDistance()
+))
 
 export default Domain.create(
-    TreatStream,
+    'Treat',
+    treat$,
     {
         spawn() {
-            TreatStream.next(new Vector(
+            treat$.next(() => new Vector(
                 randomBoardDistance(),
                 randomBoardDistance()
             ))
