@@ -7,7 +7,7 @@
     "@types/react-dom": "^0.14.20",
     "@types/webpack": "^1.12.36",
     "awesome-typescript-loader": "^3.0.0-beta.17",
-    "immview": "^2.0.7",
+    "immview": "^2.0.12",
     "immview-react-connect": "^2.0.8",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
