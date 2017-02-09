@@ -16,7 +16,7 @@ const snakeDefaultShape = [new Vector(
 )]
 
 const DIRECTIONS_RESET = new Vector(0, 0)
-const direction$ = Direction$.map(v => v)
+const direction$ = Observable.from(Direction$)
 
 const snakePositions$ =
     direction$
