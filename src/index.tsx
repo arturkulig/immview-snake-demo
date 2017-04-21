@@ -5,7 +5,7 @@ import { diagnose } from 'immview'
 diagnose.on({
     timeline: false,
     tableSummary: true,
-    tableClear: false,
+    tableClear: true,
     tableDetails: true,
 })
 import App from './components/App'

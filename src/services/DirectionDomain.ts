@@ -1,5 +1,5 @@
 import {
-    Observable,
+    Atom,
     Combine,
     Domain
 } from 'immview'
@@ -44,24 +44,25 @@ function isAcceptableNewDirection(oldDir: Vector, newDir: Vector) {
     )
 }
 
-const directionDemand$ = new Observable<Vector>(observer => { observer.next(directionVectors.NONE) })
+const directionDemand$ = new Atom<Vector>(directionVectors.NONE)
 
 const direction$ = new Combine({ ticker: Ticker$, directionDemand: directionDemand$ })
-    .bufferCount(2, 1)
-    .filter(value => {
-        return value[0].ticker.tick !== value[1].ticker.tick
+    .scan(function bufferTwo(result, item) {
+        return result.concat([item]).slice(-2)
+    }, [{ directionDemand: directionVectors.NONE }] as { ticker: number, directionDemand: Vector }[])
+    .filter(function isNextTick(value) {
+        return value[0].ticker !== value[1].ticker
     })
-    .map(value => {
+    .map(function pickDemandedDirection(value) {
         return value[value.length - 1].directionDemand
     })
-    .scan((lastAcceptableDirection: Vector, requestedDirection) => {
-        if (!lastAcceptableDirection) return directionVectors.NONE
+    .scan(function releaseAcceptableDirection(lastAcceptableDirection: Vector, requestedDirection) {
         return (
             isAcceptableNewDirection(lastAcceptableDirection, requestedDirection)
                 ? requestedDirection
                 : lastAcceptableDirection
         )
-    })
+    }, directionVectors.NONE)
 
 export default Domain.create(
     'Direction',

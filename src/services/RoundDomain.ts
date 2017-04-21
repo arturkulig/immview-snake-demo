@@ -1,5 +1,5 @@
 import {
-    Observable,
+    Atom,
     Domain
 } from 'immview';
 
@@ -7,7 +7,7 @@ export type Round$V = {
     points: number
 }
 
-const round$ = new Observable<Round$V>().startWith({ points: 0 })
+const round$ = new Atom<Round$V>({ points: 0 })
 
 export default Domain.create(
     'Round',

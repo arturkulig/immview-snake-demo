@@ -1,5 +1,5 @@
 import {
-    Observable,
+    Atom,
     Domain
 } from 'immview'
 import { BOARD_SIZE } from '../config'
@@ -11,7 +11,7 @@ function randomBoardDistance() {
 
 export type Treat$V = Vector
 
-const treat$ = new Observable<Treat$V>().startWith(new Vector(
+const treat$ = new Atom<Treat$V>(new Vector(
     randomBoardDistance(),
     randomBoardDistance()
 ))

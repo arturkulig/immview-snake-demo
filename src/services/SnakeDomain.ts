@@ -1,5 +1,5 @@
 import {
-    Observable,
+    Atom,
     Combine,
     Domain
 } from 'immview'
@@ -16,7 +16,7 @@ const snakeDefaultShape = [new Vector(
 )]
 
 const DIRECTIONS_RESET = new Vector(0, 0)
-const direction$ = Observable.from(Direction$)
+const direction$ = Direction$.map(v => v).materialize(null)
 
 const snakePositions$ =
     direction$
@@ -27,7 +27,7 @@ const snakePositions$ =
             const lastPosition = allDirections[0]
             const nextPosition = lastPosition.add(direction)
             return [nextPosition, ...allDirections].slice(0, BOARD_SIZE * BOARD_SIZE)
-        })
+        }, snakeDefaultShape)
 
 const snakeBody$ = new Combine({
     snakePositions: snakePositions$,

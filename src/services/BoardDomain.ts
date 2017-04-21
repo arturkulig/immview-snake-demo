@@ -1,5 +1,5 @@
 import {
-    Observable,
+    Atom,
     Combine,
     Domain
 } from 'immview'
@@ -19,7 +19,7 @@ const board$ = new Combine({
     snake: Snake$,
     treat: Treat$,
 }).buffer(1).map(
-    ([{snake, treat}]): Matrix<FIELD_TYPES> => {
+    function formBoard([{snake, treat}]): Matrix<FIELD_TYPES> {
 
         /** board rules */
         const snakeHead = snake[0]
