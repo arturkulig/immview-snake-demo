@@ -16,7 +16,6 @@ const push = () => {
 push()
 
 export default Domain.create(
-    'Ticker',
     ticker$,
     {}
 )

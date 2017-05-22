@@ -65,7 +65,6 @@ const direction$ = new Combine({ ticker: Ticker$, directionDemand: directionDema
     }, directionVectors.NONE)
 
 export default Domain.create(
-    'Direction',
     direction$,
     {
         go(requested: DIRECTIONS) {

@@ -17,7 +17,6 @@ const treat$ = new Atom<Treat$V>(new Vector(
 ))
 
 export default Domain.create(
-    'Treat',
     treat$,
     {
         spawn() {

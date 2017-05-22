@@ -7,20 +7,19 @@ export type Round$V = {
     points: number
 }
 
-const round$ = new Atom<Round$V>({ points: 0 })
-
-export default Domain.create(
-    'Round',
-    round$,
-    {
-        increase() {
-            round$.next(({points}) => ({ points: points + 1 }))
-        },
-        decrease() {
-            round$.next(({points}) => ({ points: points - 1 }))
-        },
-        loose() {
-            round$.next({ points: 0 })
-        }
+class RoundDomain extends Domain<Round$V> {
+    constructor() {
+        super(new Atom<Round$V>({ points: 0 }))
     }
-)
+    increase() {
+        this.next(({ points }) => ({ points: points + 1 }))
+    }
+    decrease() {
+        this.next(({ points }) => ({ points: points - 1 }))
+    }
+    loose() {
+        this.next({ points: 0 })
+    }
+}
+
+export default new RoundDomain()

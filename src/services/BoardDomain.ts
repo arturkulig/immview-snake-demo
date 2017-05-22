@@ -78,7 +78,6 @@ const board$ = new Combine({
     )
 
 export default Domain.create(
-    'Board',
     board$,
     {}
 )

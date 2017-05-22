@@ -37,7 +37,6 @@ const snakeBody$ = new Combine({
 })
 
 export default Domain.create(
-    'Snake',
     snakeBody$,
     {
         increase() {
